@@ -271,7 +271,7 @@ function Overview({ setSection }) {
             <p style={{ fontSize:12, fontWeight:800, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:12 }}>Quick Actions</p>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
               {[
-                { l:'Search Flights', href:'/' },
+                { l:'Search Flights', href:'index.html' },
                 { l:'My Transactions', sec:'transactions' },
                 { l:'Submit Request', sec:'settlements' },
                 { l:'Get Help', sec:'help' },
@@ -318,7 +318,7 @@ function MyBookings() {
             <div style={{ fontSize:40, marginBottom:12 }}>✈️</div>
             <p style={{ fontSize:15, fontWeight:800, color:'var(--ink)', marginBottom:6 }}>No bookings found</p>
             <p style={{ fontSize:13, color:'var(--muted)', marginBottom:20 }}>You don't have any {tab.toLowerCase()} bookings yet.</p>
-            <Btn onClick={() => window.location.href='/'}><IPlane size={15} /> Search Flights</Btn>
+            <Btn onClick={() => window.location.href='index.html'}><IPlane size={15} /> Search Flights</Btn>
           </Card>
         ) : filtered.map(b => (
           <Card key={b.id} style={{ overflow:'hidden' }}>
@@ -825,7 +825,7 @@ function App() {
     <aside style={{ width:240, flexShrink:0, background:'linear-gradient(180deg,#0A0F1E 0%,#111827 100%)', minHeight:'100vh', display:'flex', flexDirection:'column', position:'sticky', top:0, overflowY:'auto', zIndex:50 }}>
       {/* Logo */}
       <div style={{ padding:'20px 20px 16px', borderBottom:'1px solid rgba(255,255,255,.06)' }}>
-        <a href="/" style={{ display:'flex', alignItems:'center', gap:10, textDecoration:'none' }}>
+        <a href="index.html" style={{ display:'flex', alignItems:'center', gap:10, textDecoration:'none' }}>
           <div style={{ width:32, height:32, borderRadius:8, background:'linear-gradient(135deg,var(--a),var(--a2))', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 12px -4px rgba(227,0,27,.6)' }}>
             <span style={{ color:'white', fontWeight:900, fontSize:12 }}>TM</span>
           </div>
@@ -884,7 +884,7 @@ function App() {
               <IMenu size={22} />
             </button>
             <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, fontWeight:600, color:'var(--muted)' }}>
-              <a href="/" style={{ color:'var(--muted)', textDecoration:'none' }}>Home</a>
+              <a href="index.html" style={{ color:'var(--muted)', textDecoration:'none' }}>Home</a>
               {current && current.id !== 'overview' && <><IChevR size={13} /><span style={{ color:'var(--ink)', fontWeight:700 }}>{current.label}</span></>}
             </div>
           </div>
