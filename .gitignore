@@ -3,3 +3,6 @@
 
 # Build artifact / deploy bundle
 *.zip
+
+# Legacy VELES reference exports (not deployed)
+reference/

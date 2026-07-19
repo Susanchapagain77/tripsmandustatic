@@ -59,7 +59,7 @@ const IMap    =p=><Ico {...p} ch={<><polygon points="3 6 9 3 15 6 21 3 21 18 15 
 const IMenu   =p=><Ico {...p} ch={<><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>}/>;
 
 /* ═══ MOCK DATA ═══ */
-const USER = { name:'Susan', email:'susanchapagain77@gmail.com', phone:'+12345678963', tier:'Gold Member', joined:'Jan 2024', totalBookings:12, totalSpent:584320, upcoming:2, savedDeals:8 };
+const USER = { name:'Susan', email:'susan@tripsmandu.com', phone:'+977 9841 000 111', tier:'Gold Member', joined:'Jan 2024', totalBookings:12, totalSpent:584320, upcoming:2, savedDeals:8 };
 
 const BOOKINGS = [
   { id:1, pnr:'TLARFY', route:'KTM → KUL', date:'2026-08-20', ret:'2026-08-27', airline:'Himalaya Airlines', code:'H9', pax:'1 Adult', payment:'NPR 47,813', status:'Ticketed', type:'Roundtrip' },
@@ -851,7 +851,7 @@ function App() {
         {BOTTOM_NAV.map(item => <SidebarItem key={item.id} item={item} />)}
         <button style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'11px 18px', borderRadius:10, border:'none', cursor:'pointer', background:'transparent', color:'rgba(255,100,100,.7)', fontSize:13, fontWeight:600, marginTop:4, transition:'all .2s' }}
           onMouseEnter={e=>e.currentTarget.style.background='rgba(255,50,50,.1)'}
-          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+          onMouseLeave={e=>e.currentTarget.style.background='transparent'} onClick={()=>window.location.href='index.html'}>
           <ILogout size={17} /> Logout
         </button>
       </div>
@@ -957,7 +957,7 @@ window.TripState = window.TripState || (() => {
   
   const DEFAULT = {
     flights: FLIGHTS_DB,
-    user: { name:'Susan', email:'susanchapagain77@gmail.com', phone:'+12345678963', tier:'Gold Member', joined:'Jan 2024' },
+    user: { name:'Susan', email:'susan@tripsmandu.com', phone:'+977 9841 000 111', tier:'Gold Member', joined:'Jan 2024' },
     bookings: [],
     selectedFlight: null,
     searchParams: { from:'KTM', to:'KUL', depDate:'', adults:1, cabin:'Economy' }
