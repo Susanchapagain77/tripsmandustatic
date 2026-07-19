@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sub-Agent Workspace — TripsManDu Partner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%23E3001B%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2214%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3ETM%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --a:#E3001B; --a2:#ff2d55; --navy:#0A0F1E; --bg:#F2F4F8; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --ok:#16a34a; --okbg:#e8f7ee; --warn:#b45309; --warnbg:#fff7e6; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);min-height:100vh;display:flex;}
+  a{text-decoration:none;color:inherit;}
+  /* sidebar */
+  .side{width:240px;background:var(--navy);color:white;display:flex;flex-direction:column;padding:22px 14px;position:fixed;inset:0 auto 0 0;overflow-y:auto;}
+  .brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px;cursor:pointer;}
+  .tm{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px;box-shadow:0 4px 12px -4px rgba(227,0,27,.5);flex-shrink:0;}
+  .brand b{font-size:13px;font-weight:900;letter-spacing:.1em;display:block;}
+  .brand span{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.14em;text-transform:uppercase;}
+  .agentcard{background:rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;margin-bottom:16px;}
+  .agentcard b{font-size:13px;display:block;}
+  .agentcard span{font-size:10.5px;color:rgba(255,255,255,.45);font-weight:600;}
+  .nav-lbl{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);padding:14px 10px 6px;}
+  .nv{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;text-align:left;background:transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:13px;font-weight:700;transition:all .15s;}
+  .nv:hover{background:rgba(255,255,255,.06);color:white;}
+  .nv.on{background:var(--a);color:white;box-shadow:0 4px 14px -4px rgba(227,0,27,.5);}
+  .nv.lock{color:rgba(255,255,255,.28);cursor:not-allowed;position:relative;}
+  .nv.lock::after{content:'🔒';margin-left:auto;font-size:11px;}
+  .nv.lock:hover{background:transparent;color:rgba(255,255,255,.28);}
+  .main{margin-left:240px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+  .top{background:white;border-bottom:1px solid var(--line);padding:0 26px;height:60px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:40;}
+  .crumb{font-size:13px;font-weight:700;color:var(--muted);}
+  .switch{margin-left:auto;display:flex;align-items:center;gap:8px;background:#f8fafc;border:1.5px solid var(--line);border-radius:99px;padding:5px 6px 5px 14px;font-size:12px;font-weight:700;color:var(--muted);}
+  .switch select{border:none;background:var(--navy);color:white;font-family:inherit;font-size:12px;font-weight:800;border-radius:99px;padding:6px 12px;cursor:pointer;outline:none;}
+  .wallet{display:flex;align-items:center;gap:8px;background:var(--okbg);color:var(--ok);font-size:12px;font-weight:800;border-radius:99px;padding:8px 15px;}
+  .content{padding:26px;max-width:1100px;width:100%;}
+  h1{font-size:20px;font-weight:900;margin-bottom:2px;}
+  .sub{font-size:13px;color:var(--muted);margin-bottom:22px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+  .kpi{background:white;border-radius:14px;padding:18px 20px;box-shadow:0 2px 12px -4px rgba(10,15,30,.08);}
+  .kpi span{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);}
+  .kpi b{font-size:22px;display:block;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .card{background:white;border-radius:14px;box-shadow:0 2px 12px -4px rgba(10,15,30,.08);overflow:hidden;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);text-align:left;padding:12px 16px;border-bottom:2px solid #f1f5f9;white-space:nowrap;}
+  td{padding:12px 16px;border-bottom:1px solid #f8fafc;font-weight:600;vertical-align:middle;}
+  .pill{font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:99px;white-space:nowrap;}
+  .p-ok{background:var(--okbg);color:var(--ok);}
+  .p-warn{background:var(--warnbg);color:var(--warn);}
+  .p-red{background:#fde8ea;color:#b00015;}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:12px;border-radius:99px;padding:9px 18px;transition:all .2s;}
+  .btn-p{background:linear-gradient(135deg,var(--a),var(--a2));color:white;box-shadow:0 4px 14px -4px rgba(227,0,27,.45);}
+  .btn-p[disabled]{background:#e2e8f0;color:#94a3b8;box-shadow:none;cursor:not-allowed;}
+  .btn-g{background:white;color:var(--ink);border:1.5px solid var(--line);}
+  .pane{display:none;}
+  .pane.show{display:block;animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .blocked{background:var(--warnbg);border:1.5px solid #fbbf24;border-radius:12px;padding:16px 18px;margin-top:14px;display:none;}
+  .blocked.show{display:block;animation:fade .3s ease;}
+  .markup{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:14px;font-size:13px;font-weight:700;}
+  .markup input{width:90px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;font-weight:700;outline:none;}
+  .markup input:disabled{background:#eef1f5;color:#94a3b8;cursor:not-allowed;}
+  .note{font-size:11.5px;color:var(--muted);font-weight:600;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;font-size:13px;font-weight:700;padding:12px 22px;border-radius:99px;transition:transform .3s;z-index:99;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  @media(max-width:860px){.side{display:none;}.main{margin-left:0;}}
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <a class="brand" href="index.html"><span class="tm">TM</span><span><b>TripsManDu</b><span>Partner Portal</span></span></a>
+  <div class="agentcard"><b>Anish Rai</b><span>Sub-agent · Himalayan Voyages</span></div>
+  <p class="nav-lbl">Permitted modules</p>
+  <button class="nv on" data-p="dash" onclick="go('dash')">▦ Dashboard</button>
+  <button class="nv" data-p="search" onclick="go('search')">✈ Search &amp; Issue</button>
+  <button class="nv" data-p="bookings" onclick="go('bookings')">🎟 My Bookings</button>
+  <button class="nv" data-p="support" onclick="go('support')">💬 Support</button>
+  <p class="nav-lbl">Restricted by main agent</p>
+  <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Wallet is managed by your main agent')">💳 Wallet</button>
+  <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Agents module requires main-agent role')">👥 Agents</button>
+  <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Statements are managed by your main agent')">📑 Statement</button>
+  <div style="flex:1"></div>
+  <button class="nv" onclick="location.href='auth.html'">↩ Logout</button>
+</aside>
+
+<div class="main">
+  <div class="top">
+    <span class="crumb">Himalayan Voyages / Sub-agent workspace</span>
+    <div class="switch">Viewing as
+      <select onchange="if(this.value==='main')location.href='agency.html'">
+        <option value="sub" selected>Sub-agent · Anish Rai</option>
+        <option value="main">Main Agent · Pemba Sherpa</option>
+      </select>
+    </div>
+    <div class="wallet">◉ NPR 60,000 <span style="color:#64748b;font-weight:700;">of 100,000 left</span></div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <section class="pane show" id="p-dash">
+      <h1>Namaste, Anish 👋</h1>
+      <p class="sub">Your issuing limit resets when Himalayan Voyages tops up your allocation.</p>
+      <div class="cards">
+        <div class="kpi"><span>Tickets issued (Jul)</span><b>38</b></div>
+        <div class="kpi"><span>Sales volume (Jul)</span><b>NPR 9.4L</b></div>
+        <div class="kpi"><span>Limit remaining</span><b style="color:var(--ok);">NPR 60,000</b></div>
+        <div class="kpi"><span>Pending requests</span><b>2</b></div>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Recent activity</th><th>PNR</th><th>When</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Issued KTM→DEL · Rajesh Thapa</td><td style="color:var(--a);font-weight:800;">PSKIJS</td><td>Today 10:20</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td>Top-up request to main agent</td><td>—</td><td>Yesterday</td><td><span class="pill p-warn">Pending</span></td></tr>
+            <tr><td>Issued KTM→KUL · Mina Gurung</td><td style="color:var(--a);font-weight:800;">QIYWOQ</td><td>17 Jul</td><td><span class="pill p-ok">Issued</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEARCH & ISSUE -->
+    <section class="pane" id="p-search">
+      <h1>Search &amp; Issue</h1>
+      <p class="sub">Fares shown net of agency markup. Your remaining limit: <b style="color:var(--ok);">NPR 60,000</b></p>
+
+      <div class="card" style="padding:18px 20px;margin-bottom:16px;">
+        <p style="font-size:13px;font-weight:800;margin-bottom:4px;">KTM → KUL · Thu, 20 Aug 2026 · 1 Adult · Economy</p>
+        <p class="note">Demo search — two fares below exercise the limit rule.</p>
+      </div>
+
+      <!-- fare within limit -->
+      <div class="card" style="padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;">
+          <p style="font-weight:900;font-size:15px;">Biman Bangladesh · BG 372</p>
+          <p class="note">07:40 → 21:15 · 1 stop (DAC) · Non-refundable</p>
+        </div>
+        <b style="font-size:18px;color:var(--a);">NPR 24,200</b>
+        <button class="btn btn-p" onclick="toast('✓ Issued within limit — PNR TMBG2K · NPR 24,200 deducted from your allocation')">Issue ticket</button>
+      </div>
+
+      <!-- fare exceeding limit -->
+      <div class="card" style="padding:18px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;">
+          <p style="font-weight:900;font-size:15px;">Qatar Airways · QR 651</p>
+          <p class="note">19:30 → 09:45+1 · 1 stop (DOH) · Refundable</p>
+        </div>
+        <b style="font-size:18px;color:var(--a);">NPR 68,400</b>
+        <button class="btn btn-p" onclick="document.getElementById('blocked').classList.add('show')">Issue ticket</button>
+      </div>
+      <div class="blocked" id="blocked">
+        <p style="font-size:13px;font-weight:900;color:var(--warn);margin-bottom:4px;">⚠ Fare exceeds your available limit</p>
+        <p style="font-size:12.5px;color:var(--ink);margin-bottom:12px;">NPR 68,400 fare · NPR 60,000 remaining. Ask Himalayan Voyages to raise your allocation to issue this ticket.</p>
+        <button class="btn btn-g" id="topupbtn" onclick="this.textContent='✓ Request sent to Pemba Sherpa';this.disabled=true;toast('Top-up request sent to your main agent')">Request top-up from Himalayan Voyages</button>
+      </div>
+
+      <div class="markup">
+        Markup override
+        <input type="number" value="850" id="mk" disabled> NPR / ticket
+        <label style="display:flex;align-items:center;gap:7px;margin-left:auto;font-size:12px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" style="width:auto;accent-color:var(--a);" onchange="document.getElementById('mk').disabled=!this.checked;toast(this.checked?'Demo: permission granted — markup editable':'Markup locked — permission required')">
+          demo: main agent grants permission
+        </label>
+      </div>
+      <p class="note" style="margin-top:8px;">When locked, the markup set by Himalayan Voyages (NPR 850) applies and cannot be edited.</p>
+    </section>
+
+    <!-- MY BOOKINGS -->
+    <section class="pane" id="p-bookings">
+      <h1>My Bookings</h1>
+      <p class="sub">Scoped to tickets issued by you — other agents' bookings are not visible.</p>
+      <div class="card">
+        <table>
+          <thead><tr><th>PNR</th><th>Route</th><th>Passenger</th><th>Issued</th><th>Fare</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--a);font-weight:800;">PSKIJS</td><td>KTM → DEL</td><td>Rajesh Thapa</td><td>19 Jul 2026</td><td>NPR 18,900</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td style="color:var(--a);font-weight:800;">QIYWOQ</td><td>KTM → KUL</td><td>Mina Gurung</td><td>17 Jul 2026</td><td>NPR 32,651</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td style="color:var(--a);font-weight:800;">TMBG2K</td><td>KTM → KUL</td><td>Hari Shrestha</td><td>15 Jul 2026</td><td>NPR 24,200</td><td><span class="pill p-warn">Held · TTL 20 Aug</span></td></tr>
+            <tr><td style="color:var(--a);font-weight:800;">XKPL9A</td><td>KTM → DXB</td><td>Sunita Karki</td><td>12 Jul 2026</td><td>NPR 41,800</td><td><span class="pill p-red">Cancelled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SUPPORT -->
+    <section class="pane" id="p-support">
+      <h1>Support</h1>
+      <p class="sub">Tickets you raise go to TripsManDu ops; wallet issues go to your main agent.</p>
+      <div class="card" style="padding:20px;">
+        <p style="font-size:13px;font-weight:800;margin-bottom:10px;">Open a support ticket</p>
+        <input placeholder="Subject — e.g. Reissue quote for PSKIJS" style="width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:13px;margin-bottom:10px;outline:none;">
+        <textarea placeholder="Describe the issue…" rows="4" style="width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:13px;resize:vertical;outline:none;"></textarea>
+        <div style="margin-top:12px;"><button class="btn btn-p" onclick="toast('✓ Ticket created — TripsManDu ops will respond within 4 business hours')">Create ticket</button></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+  function go(p){
+    document.querySelectorAll('.nv[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+    document.querySelectorAll('.pane').forEach(x=>x.classList.remove('show'));
+    document.getElementById('p-'+p).classList.add('show');
+  }
+  let tt;
+  function toast(msg){
+    const t=document.getElementById('toastEl');
+    t.textContent=msg; t.classList.add('show');
+    clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2800);
+  }
+</script>
+</body>
+</html>
