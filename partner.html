@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner with TripsManDu — Agency Onboarding</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%23E3001B%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2214%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3ETM%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --a:#E3001B; --a2:#ff2d55; --navy:#0A0F1E; --bg:#F2F4F8; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --ok:#16a34a; --okbg:#e8f7ee; --warn:#b45309; --warnbg:#fff7e6; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);}
+  a{text-decoration:none;color:inherit;}
+  .nav{background:white;border-bottom:1px solid var(--line);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .tm{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:13px;box-shadow:0 4px 12px -4px rgba(227,0,27,.5);}
+  .wordmark{font-weight:800;font-size:15px;letter-spacing:.22em;text-transform:uppercase;}
+  .navright{display:flex;align-items:center;gap:16px;font-size:13px;font-weight:700;}
+  .navright .in{color:var(--a);}
+  .hero{background:linear-gradient(160deg,#0A0F1E,#1a2338);color:white;padding:56px 24px 100px;text-align:center;}
+  .hero .eyebrow{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#ff5d70;margin-bottom:12px;}
+  .hero h1{font-size:clamp(26px,4.5vw,40px);font-weight:800;max-width:640px;margin:0 auto;line-height:1.2;text-wrap:balance;}
+  .hero p{color:rgba(255,255,255,.55);font-size:15px;margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto;}
+  .hero .cta{display:inline-flex;margin-top:26px;background:linear-gradient(135deg,var(--a),var(--a2));color:white;font-weight:800;font-size:14px;border-radius:99px;padding:14px 32px;box-shadow:0 8px 28px -8px rgba(227,0,27,.6);transition:transform .2s;}
+  .hero .cta:hover{transform:scale(1.04);}
+  .wrap{max-width:1060px;margin:-58px auto 0;padding:0 20px 70px;}
+  .bens{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:40px;}
+  .ben{background:white;border-radius:16px;padding:22px;box-shadow:0 10px 30px -12px rgba(10,15,30,.15);}
+  .ben .ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:12px;}
+  .ben b{font-size:14.5px;display:block;margin-bottom:5px;}
+  .ben p{font-size:12.5px;color:var(--muted);font-weight:600;line-height:1.55;}
+  .apply{display:grid;grid-template-columns:1fr 380px;gap:22px;align-items:start;}
+  @media(max-width:900px){.apply{grid-template-columns:1fr;}}
+  .card{background:white;border-radius:18px;box-shadow:0 2px 12px -4px rgba(10,15,30,.08);padding:26px 28px;}
+  h2{font-size:18px;font-weight:800;margin-bottom:4px;}
+  .sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr;}}
+  .f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .f label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);}
+  .f input,.f select{border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-family:inherit;font-size:13.5px;outline:none;transition:border .2s;background:white;}
+  .f input:focus{border-color:var(--a);}
+  .f .err{display:none;font-size:11.5px;font-weight:700;color:#b00015;}
+  .drop{border:2px dashed var(--line);border-radius:14px;padding:26px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px;}
+  .drop:hover{border-color:var(--a);background:#fff8f8;}
+  .drop b{font-size:13px;display:block;}
+  .drop span{font-size:11.5px;color:var(--muted);font-weight:600;}
+  .drop.done{border-style:solid;border-color:#86efac;background:var(--okbg);}
+  .agree{display:flex;gap:10px;font-size:12.5px;color:var(--muted);font-weight:600;margin:6px 0 18px;align-items:flex-start;}
+  .agree input{width:15px;height:15px;margin-top:2px;accent-color:var(--a);}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:14px;border-radius:99px;padding:14px 30px;background:linear-gradient(135deg,var(--a),var(--a2));color:white;box-shadow:0 4px 18px -4px rgba(227,0,27,.45);transition:all .2s;}
+  .btn:hover{transform:scale(1.02);}
+  /* status rail */
+  .statuses .st{border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+  .statuses .tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:inline-block;padding:3px 10px;border-radius:99px;}
+  .statuses b{font-size:13.5px;display:block;margin-bottom:4px;}
+  .statuses p{font-size:12.5px;color:var(--muted);font-weight:600;line-height:1.55;}
+  .demo-note{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
+  /* submitted overlay states */
+  .state{display:none;}
+  .state.show{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .bigstate{text-align:center;padding:46px 24px;}
+  .bigstate .ic{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;}
+  .refno{font-family:ui-monospace,monospace;font-size:15px;font-weight:800;background:#f8fafc;border:1.5px dashed var(--line);border-radius:10px;padding:9px 18px;display:inline-block;margin:10px 0;}
+  footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;font-size:12px;font-weight:600;padding:26px;}
+  footer a{color:white;font-weight:700;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="index.html"><span class="tm">TM</span><span class="wordmark">TripsManDu</span></a>
+  <div class="navright">
+    <span style="color:var(--muted);">Already a partner?</span><a class="in" href="auth.html">Sign in →</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <p class="eyebrow">TripsManDu Partner Program</p>
+  <h1>Grow your travel agency on Nepal's OTA rails</h1>
+  <p>Wallet-based ticketing, sub-agent management, your own TTL control, and NPR settlement — approved agencies go live in 48 hours.</p>
+  <a class="cta" href="#apply">Apply now — it's free</a>
+</div>
+
+<div class="wrap">
+  <div class="bens">
+    <div class="ben"><div class="ic" style="background:#fde8ea;">💳</div><b>Prepaid wallet ticketing</b><p>Top up via ConnectIPS, IME Pay or bank transfer and issue instantly. No credit-line paperwork.</p></div>
+    <div class="ben"><div class="ic" style="background:#e8eef8;">👥</div><b>Sub-agent management</b><p>Create staff accounts with their own limits, permissions and markup rules.</p></div>
+    <div class="ben"><div class="ic" style="background:#eef8ee;">⏱</div><b>Your own TTL control</b><p>Draft ticket time limits per agent and hold fares with confidence.</p></div>
+    <div class="ben"><div class="ic" style="background:#fdf3e8;">📊</div><b>Statements &amp; invoices</b><p>Per-transaction invoices, exportable debit/credit statements, live wallet ledger.</p></div>
+  </div>
+
+  <div class="apply" id="apply">
+    <div class="card">
+      <!-- FORM STATE -->
+      <div class="state show" id="st-form">
+        <h2>Agency application</h2>
+        <p class="sub">Reviewed by the TripsManDu operations team — approval typically within 2 business days.</p>
+        <div class="grid2">
+          <div class="f"><label>Agency name</label><input id="aname" placeholder="e.g. Everest Horizon Treks &amp; Travels"></div>
+          <div class="f"><label>PAN / Registration no.</label><input id="pan" placeholder="e.g. 609712345"><span class="err" id="panerr">This agency is already registered — <a href="auth.html" style="color:#b00015;text-decoration:underline;">recover access instead</a>.</span></div>
+          <div class="f"><label>Contact person</label><input placeholder="Full name"></div>
+          <div class="f"><label>Phone</label><input placeholder="+977 98XXXXXXXX"></div>
+          <div class="f"><label>Email</label><input placeholder="agency@example.com"></div>
+          <div class="f"><label>City</label><select><option>Kathmandu</option><option>Pokhara</option><option>Biratnagar</option><option>Butwal</option><option>Other</option></select></div>
+        </div>
+        <div class="f"><label>Office address</label><input placeholder="Street, ward, district"></div>
+        <div class="drop" id="drop" onclick="this.classList.add('done');this.innerHTML='<b>✓ 2 documents attached</b><span>license.pdf · pan-certificate.pdf</span>'">
+          <b>⬆ Upload license &amp; PAN certificate</b>
+          <span>Drag &amp; drop or click · PDF/JPG · max 5 MB each</span>
+        </div>
+        <label class="agree"><input type="checkbox" id="agree"> I confirm this agency holds a valid travel trade license and I accept the TripsManDu partner terms, including prepaid-wallet settlement in NPR.</label>
+        <button class="btn" onclick="submitApp()">Submit application</button>
+        <p style="font-size:11.5px;color:var(--muted);font-weight:600;margin-top:12px;">Demo: use PAN <b>600000000</b> to see the duplicate-registration error.</p>
+      </div>
+
+      <!-- SUBMITTED -->
+      <div class="state" id="st-submitted">
+        <div class="bigstate">
+          <div class="ic" style="background:var(--warnbg);color:var(--warn);">⏳</div>
+          <h2>Application received — pending review</h2>
+          <p class="sub" style="margin-bottom:4px;">Our operations team is verifying your license and PAN.</p>
+          <div class="refno">Ref #AG-2026-0147</div>
+          <p style="font-size:12.5px;color:var(--muted);font-weight:600;">You'll get an email and SMS when the review completes. Typical turnaround: 2 business days.</p>
+        </div>
+      </div>
+
+      <!-- APPROVED -->
+      <div class="state" id="st-approved">
+        <div class="bigstate">
+          <div class="ic" style="background:var(--okbg);color:var(--ok);">✓</div>
+          <h2>Approved — welcome aboard 🎉</h2>
+          <p class="sub" style="margin-bottom:14px;">Ref #AG-2026-0147 · Your portal credentials were sent to your email.</p>
+          <div style="background:#f8fafc;border:1.5px solid var(--line);border-radius:12px;padding:16px;max-width:340px;margin:0 auto 16px;text-align:left;font-size:13px;font-weight:600;color:var(--muted);">
+            <p>✉ <b style="color:var(--ink);">Credentials email sent</b></p>
+            <p style="margin-top:6px;">Sign in, top up your wallet via ConnectIPS or IME Pay, and issue your first ticket today.</p>
+          </div>
+          <a class="btn" href="auth.html">Sign in to your agency portal</a>
+        </div>
+      </div>
+
+      <!-- REJECTED -->
+      <div class="state" id="st-rejected">
+        <div class="bigstate">
+          <div class="ic" style="background:#fde8ea;color:#b00015;">✕</div>
+          <h2>Application not approved</h2>
+          <p class="sub" style="margin-bottom:10px;">Ref #AG-2026-0147</p>
+          <div style="background:#fde8ea;border-radius:12px;padding:14px 18px;max-width:380px;margin:0 auto 18px;font-size:13px;font-weight:600;color:#b00015;text-align:left;">
+            Reason: the uploaded trade license has expired. Renew it with the Department of Tourism and reapply — your details are saved.
+          </div>
+          <button class="btn" onclick="show('st-form')">Fix &amp; reapply</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card statuses">
+        <p class="demo-note">Demo: application states</p>
+        <div class="st" style="cursor:pointer;" onclick="show('st-submitted')"><span class="tag" style="background:var(--warnbg);color:var(--warn);">Pending</span><b>Submitted → under review</b><p>Reference number issued, ops team verifying documents.</p></div>
+        <div class="st" style="cursor:pointer;" onclick="show('st-approved')"><span class="tag" style="background:var(--okbg);color:var(--ok);">Approved</span><b>Credentials issued</b><p>Agency appears in the admin console's active list; wallet ready for first top-up.</p></div>
+        <div class="st" style="cursor:pointer;" onclick="show('st-rejected')"><span class="tag" style="background:#fde8ea;color:#b00015;">Rejected</span><b>Returned with reason</b><p>Fixable rejection with a reapply path — details preserved.</p></div>
+        <div class="st"><span class="tag" style="background:#e8eef8;color:#39557E;">Admin side</span><b>Approval queue</b><p>Applications land in the <a href="admin.html" style="color:var(--a);font-weight:700;">admin console</a> → Agency Module → approval requests.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 TripsManDu · <a href="index.html">Home</a> · <a href="agency.html">Agency portal</a> · <a href="auth.html">Sign in</a></footer>
+
+<script>
+  function show(id){
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('show'));
+    document.getElementById(id).classList.add('show');
+    document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function submitApp(){
+    const pan=document.getElementById('pan');
+    const err=document.getElementById('panerr');
+    err.style.display='none';
+    if(pan.value.trim()==='600000000'){ err.style.display='block'; pan.style.borderColor='#b00015'; return; }
+    if(!document.getElementById('agree').checked){ alert('Please accept the partner terms to continue.'); return; }
+    show('st-submitted');
+  }
+</script>
+</body>
+</html>
