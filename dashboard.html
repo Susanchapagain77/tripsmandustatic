@@ -119,8 +119,8 @@ const SETTLE_LOGS = [
 const FAQS = [
   { q:'How do I cancel my booking?', a:'Go to My Bookings, find your booking, and click View → Cancel. Cancellations are subject to airline policy.' },
   { q:'When will I receive my refund?', a:'Refunds are processed within 7–14 business days after the airline approves the cancellation.' },
-  { q:'How do I change my flight date?', a:'Submit a Date Change Request under Settlements Request. Our team will process it within 24 hours.' },
-  { q:'Can I add extra baggage?', a:'Yes — submit a Baggage Addition request under Settlements Request with your PNR.' },
+  { q:'How do I change my flight date?', a:'Submit a Date Change Request under Service Requests. Our team will process it within 24 hours.' },
+  { q:'Can I add extra baggage?', a:'Yes — submit a Baggage Addition request under Service Requests with your PNR.' },
   { q:'How do I download my e-ticket?', a:'Go to My Bookings, open the booking detail, and click Download PDF.' },
 ];
 
@@ -292,9 +292,11 @@ function Overview({ setSection }) {
 }
 
 /* ═══ SECTION: MY BOOKINGS ═══ */
-function MyBookings() {
+function MyBookings({ setSection }) {
   const [tab, setTab] = useState('All');
   const [expanded, setExpanded] = useState(null);
+  const [cancelId, setCancelId] = useState(null);
+  const [cancelSent, setCancelSent] = useState({});
   const tabs = ['All','Ticketed','Booked','Cancelled'];
   const filtered = tab==='All' ? BOOKINGS : BOOKINGS.filter(b => b.status === tab);
 
@@ -357,7 +359,7 @@ function MyBookings() {
                   <IEye size={13} /> {expanded===b.id ? 'Hide' : 'View'}
                 </button>
                 {b.status === 'Ticketed' && (
-                  <button style={{ height:34, padding:'0 14px', borderRadius:8, background:'rgba(227,0,27,.08)', border:'none', fontSize:12, fontWeight:700, color:'var(--a)', cursor:'pointer' }}>
+                  <button onClick={() => window.location.href='confirmation.html'} style={{ height:34, padding:'0 14px', borderRadius:8, background:'rgba(227,0,27,.08)', border:'none', fontSize:12, fontWeight:700, color:'var(--a)', cursor:'pointer' }}>
                     📄 E-Ticket
                   </button>
                 )}
@@ -365,13 +367,50 @@ function MyBookings() {
             </div>
             {/* Expanded detail */}
             {expanded === b.id && (
-              <div style={{ marginTop:16, paddingTop:16, borderTop:'1px solid #f1f5f9', display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:16 }}>
-                {[['Type',b.type],['Airline',b.airline],['Passengers',b.pax],['Departure',b.date],['Return',b.ret],['Payment',b.payment]].map(([l,v])=>(
-                  <div key={l}>
-                    <p style={{ fontSize:10, fontWeight:700, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:3 }}>{l}</p>
-                    <p style={{ fontSize:13, fontWeight:800, color:'var(--ink)' }}>{v}</p>
+              <div style={{ marginTop:16, paddingTop:16, borderTop:'1px solid #f1f5f9' }}>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:16 }}>
+                  {[['Type',b.type],['Airline',b.airline],['Passengers',b.pax],['Departure',b.date],['Return',b.ret],['Payment',b.payment]].map(([l,v])=>(
+                    <div key={l}>
+                      <p style={{ fontSize:10, fontWeight:700, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:3 }}>{l}</p>
+                      <p style={{ fontSize:13, fontWeight:800, color:'var(--ink)' }}>{v}</p>
+                    </div>
+                  ))}
+                </div>
+                {b.status !== 'Cancelled' && (
+                  <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:16 }}>
+                    {b.status==='Ticketed' && (
+                      <button onClick={()=>window.location.href='confirmation.html'} style={{ height:34, padding:'0 14px', borderRadius:8, background:'#f8fafc', border:'1px solid #e2e8f0', fontSize:12, fontWeight:700, color:'var(--slate)', cursor:'pointer' }}>📄 Download e-ticket</button>
+                    )}
+                    <button onClick={()=>setSection('settlements')} style={{ height:34, padding:'0 14px', borderRadius:8, background:'#f8fafc', border:'1px solid #e2e8f0', fontSize:12, fontWeight:700, color:'var(--slate)', cursor:'pointer' }}>🗓 Request date change</button>
+                    <button onClick={()=>setSection('settlements')} style={{ height:34, padding:'0 14px', borderRadius:8, background:'#f8fafc', border:'1px solid #e2e8f0', fontSize:12, fontWeight:700, color:'var(--slate)', cursor:'pointer' }}>♿ Add special request</button>
+                    <button onClick={()=>setCancelId(cancelId===b.id?null:b.id)} style={{ height:34, padding:'0 14px', borderRadius:8, background:'rgba(227,0,27,.06)', border:'1px solid rgba(227,0,27,.25)', fontSize:12, fontWeight:700, color:'var(--a)', cursor:'pointer' }}>✕ Cancel booking…</button>
                   </div>
-                ))}
+                )}
+                {cancelId===b.id && !cancelSent[b.id] && (() => {
+                  const paid = parseInt(b.payment.replace(/[^0-9]/g,'')) || 0;
+                  const penalty = 5000;
+                  const refund = Math.max(0, paid - penalty);
+                  return (
+                    <div style={{ marginTop:14, background:'#fff7e6', border:'1.5px solid #fbbf24', borderRadius:12, padding:'16px 18px' }}>
+                      <p style={{ fontSize:13, fontWeight:900, color:'var(--ink)', marginBottom:8 }}>Cancel {b.pnr} — fare rules</p>
+                      <p style={{ fontSize:12.5, color:'var(--slate)', marginBottom:12 }}>This fare is partially refundable. Airline cancellation penalty NPR 5,000 applies. No-show forfeits the full fare.</p>
+                      <div style={{ display:'flex', flexDirection:'column', gap:4, fontSize:13, fontWeight:700, maxWidth:320 }}>
+                        <div style={{ display:'flex', justifyContent:'space-between' }}><span style={{ color:'var(--muted)' }}>Amount paid</span><span>NPR {paid.toLocaleString()}</span></div>
+                        <div style={{ display:'flex', justifyContent:'space-between' }}><span style={{ color:'var(--muted)' }}>Cancellation penalty</span><span>− NPR {penalty.toLocaleString()}</span></div>
+                        <div style={{ display:'flex', justifyContent:'space-between', borderTop:'1.5px solid #fbbf24', paddingTop:6, marginTop:4, color:'var(--a)' }}><span>Estimated refund</span><span>NPR {refund.toLocaleString()}</span></div>
+                      </div>
+                      <div style={{ display:'flex', gap:10, marginTop:14 }}>
+                        <button onClick={()=>setCancelSent({...cancelSent,[b.id]:true})} style={{ height:36, padding:'0 18px', borderRadius:99, background:'var(--a)', border:'none', fontSize:12, fontWeight:800, color:'white', cursor:'pointer' }}>Confirm cancellation request</button>
+                        <button onClick={()=>setCancelId(null)} style={{ height:36, padding:'0 18px', borderRadius:99, background:'white', border:'1.5px solid #e2e8f0', fontSize:12, fontWeight:800, color:'var(--slate)', cursor:'pointer' }}>Keep booking</button>
+                      </div>
+                    </div>
+                  );
+                })()}
+                {cancelSent[b.id] && (
+                  <div style={{ marginTop:14, background:'#e8f7ee', border:'1.5px solid #86efac', borderRadius:12, padding:'14px 18px', fontSize:13, fontWeight:700, color:'#16a34a' }}>
+                    ✓ Cancellation request for {b.pnr} submitted — estimated refund NPR {(Math.max(0,(parseInt(b.payment.replace(/[^0-9]/g,''))||0)-5000)).toLocaleString()}. Track it under Request Logs.
+                  </div>
+                )}
               </div>
             )}
           </Card>
@@ -501,7 +540,7 @@ function SettlementsRequest() {
 
   return (
     <div className="fade">
-      <PageHeader title="Settlement Requests" sub="Request date changes, cancellations, or special services"
+      <PageHeader title="Service Requests" sub="Request date changes, cancellations, refunds, or special services"
         action={<Btn onClick={()=>setShowForm(true)}><IPlus size={15} /> New Request</Btn>} />
 
       {showForm && (
@@ -585,7 +624,7 @@ function SettlementsLogs() {
 
   return (
     <div className="fade">
-      <PageHeader title="Settlement Logs" sub="History of all processed settlement requests" />
+      <PageHeader title="Service Request Logs" sub="History of all processed service requests" />
       <div style={{ display:'flex', gap:0, borderBottom:'2px solid #f1f5f9', marginBottom:20, overflowX:'auto' }}>
         {TABS.map(t=>(
           <button key={t} onClick={()=>setTab(t)}
@@ -782,13 +821,65 @@ function SupportTickets({ setSection }) {
 }
 
 /* ═══ APP SHELL ═══ */
+/* ═══ SECTION: MY PREFERENCES ═══ */
+function MyPreferences() {
+  const [showPass, setShowPass] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const EVENTS = ['Booking confirmations','Schedule changes','Refund updates','Promos & deals','Newsletter'];
+  return (
+    <div className="fade">
+      <PageHeader title="My Preferences" sub="Travel documents, notifications, and language" />
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))', gap:16 }}>
+        <Card>
+          <p style={{ fontSize:14, fontWeight:900, color:'var(--ink)', marginBottom:4 }}>🛂 Travel Documents</p>
+          <p style={{ fontSize:12, color:'var(--muted)', marginBottom:16 }}>Encrypted at rest · every access is logged</p>
+          {[['Passport No.', showPass ? 'PA0846231' : '•••••6231'],['Nationality','Nepalese'],['Expiry','12 Apr 2031']].map(([l,v])=>(
+            <div key={l} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'11px 0', borderBottom:'1px solid #f1f5f9' }}>
+              <span style={{ fontSize:12.5, color:'var(--muted)', fontWeight:600 }}>{l}</span>
+              <span style={{ fontSize:13.5, fontWeight:800, color:'var(--ink)', letterSpacing: l==='Passport No.' ? '.08em' : 0 }}>{v}
+                {l==='Passport No.' && <button onClick={()=>setShowPass(!showPass)} style={{ marginLeft:10, border:'none', background:'#f8fafc', borderRadius:6, fontSize:11, fontWeight:700, color:'var(--slate)', cursor:'pointer', padding:'3px 9px' }}>{showPass?'Hide':'Reveal'}</button>}
+              </span>
+            </div>
+          ))}
+          <p style={{ fontSize:11.5, color:'#16a34a', fontWeight:700, marginTop:12 }}>✓ Valid — used automatically on international bookings</p>
+        </Card>
+        <Card>
+          <p style={{ fontSize:14, fontWeight:900, color:'var(--ink)', marginBottom:4 }}>🔔 Notifications</p>
+          <p style={{ fontSize:12, color:'var(--muted)', marginBottom:14 }}>Choose how we reach you, per event</p>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 52px 52px 52px', gap:6, alignItems:'center' }}>
+            <span></span>
+            {['Email','SMS','Push'].map(c=><span key={c} style={{ fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'.1em', color:'var(--muted)', textAlign:'center' }}>{c}</span>)}
+            {EVENTS.map((ev,i)=>(
+              <React.Fragment key={ev}>
+                <span style={{ fontSize:12.5, fontWeight:700, color:'var(--slate)', padding:'7px 0' }}>{ev}</span>
+                {[0,1,2].map(ch=>(
+                  <span key={ch} style={{ textAlign:'center' }}><input type="checkbox" defaultChecked={ch===0 || (ch===1 && i<3)} style={{ accentColor:'var(--a)', width:15, height:15, cursor:'pointer' }} /></span>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:12, marginTop:16, paddingTop:14, borderTop:'1px solid #f1f5f9' }}>
+            <span style={{ fontSize:12.5, fontWeight:700, color:'var(--slate)' }}>Language</span>
+            <select style={{ fontFamily:'inherit', fontSize:12.5, fontWeight:700, border:'1.5px solid #e2e8f0', borderRadius:8, padding:'6px 10px', color:'var(--ink)' }}>
+              <option>English</option><option>नेपाली</option>
+            </select>
+            <div style={{ flex:1 }} />
+            <Btn onClick={()=>{setSaved(true);setTimeout(()=>setSaved(false),2200);}}>{saved?'✓ Saved':'Save preferences'}</Btn>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
 const NAV_ITEMS = [
-  { id:'overview',     icon:IHome,    label:'My Preferences' },
+  { id:'overview',     icon:IHome,    label:'Overview' },
   { id:'bookings',     icon:ITicket,  label:'My Bookings' },
+  { id:'preferences',  icon:IUser,    label:'My Preferences' },
   { id:'transactions', icon:ICard,    label:'My Transactions' },
   { id:'notices',      icon:IBell,    label:'My Notices',    badge:2 },
-  { id:'settlements',  icon:IRefund,  label:'Settlements Request' },
-  { id:'logs',         icon:ILog,     label:'Settlements Logs' },
+  { id:'settlements',  icon:IRefund,  label:'Service Requests' },
+  { id:'logs',         icon:ILog,     label:'Request Logs' },
 ];
 const BOTTOM_NAV = [
   { id:'help',     icon:IHelp,    label:'Help & Support' },
@@ -902,11 +993,12 @@ function App() {
         {/* Page content */}
         <main style={{ flex:1, padding:'28px 28px 48px', maxWidth:1200 }}>
           {section==='overview'     && <Overview setSection={setSection} />}
-          {section==='bookings'     && <MyBookings />}
+          {section==='bookings'     && <MyBookings setSection={setSection} />}
           {section==='transactions' && <MyTransactions />}
           {section==='notices'      && <MyNotices />}
           {section==='settlements'  && <SettlementsRequest />}
           {section==='logs'         && <SettlementsLogs />}
+          {section==='preferences'  && <MyPreferences />}
           {section==='help'         && <HelpSupport />}
           {section==='tickets'      && <SupportTickets setSection={setSection} />}
         </main>
