@@ -110,6 +110,7 @@ const SETTLEMENTS = [
 ];
 
 const SETTLE_LOGS = [
+  { id:9, tab:'Package', cat:'Package Cancellation', by:'Susan Chapagai', date:'2026-06-02', status:'COMPLETED', pnr:'PKG-BALI-102' },
   { id:1, tab:'Date Change', cat:'Date Change Request', by:'Susan Chapagai', date:'2026-05-20', status:'COMPLETED', pnr:'TLARFY' },
   { id:2, tab:'Cancelled',   cat:'Cancellation',        by:'Susan Chapagai', date:'2026-05-12', status:'COMPLETED', pnr:'SAKNBQ' },
   { id:3, tab:'Baggage',     cat:'Baggage Addition',    by:'Susan Chapagai', date:'2026-05-11', status:'PENDING',   pnr:'QGVOGU' },
@@ -550,7 +551,7 @@ function SettlementsRequest() {
             <button onClick={()=>setShowForm(false)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--muted)' }}><IClose size={18} /></button>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }}>
-            {[['Category', 'cat', ['Date Change Request','Cancellation','Baggage Addition','Meal Request','Wheelchair Request']],
+            {[['Category', 'cat', ['Date Change Request','Cancellation','Baggage Addition','Meal Request','Wheelchair Request','Package Cancellation','Package Refund']],
               ['PNR ID', 'pnr', null]].map(([l,k,opts])=>(
               <div key={k}>
                 <label style={{ fontSize:11, fontWeight:700, color:'var(--slate)', display:'block', marginBottom:6, textTransform:'uppercase', letterSpacing:'.08em' }}>{l} *</label>
@@ -618,7 +619,7 @@ function SettlementsRequest() {
 
 /* ═══ SECTION: SETTLEMENTS LOGS ═══ */
 function SettlementsLogs() {
-  const TABS = ['Date Change','Cancelled','Baggage Addition','Meal Request','Wheelchair Request'];
+  const TABS = ['Date Change','Cancelled','Baggage Addition','Meal Request','Wheelchair Request','Package'];
   const [tab, setTab] = useState('Date Change');
   const rows = SETTLE_LOGS.filter(l => l.tab === tab.split(' ')[0]);
 
