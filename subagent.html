@@ -60,6 +60,11 @@
   .markup{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:14px;font-size:13px;font-weight:700;}
   .markup input{width:90px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;font-weight:700;outline:none;}
   .markup input:disabled{background:#eef1f5;color:#94a3b8;cursor:not-allowed;}
+  .qsearch{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end;}
+  .qsearch label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:5px;}
+  .qsearch input,.qsearch select{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;font-family:inherit;font-size:13px;font-weight:700;outline:none;background:white;}
+  .qsearch input:focus,.qsearch select:focus{border-color:var(--a);}
+  .qsearch .btn{height:40px;justify-content:center;}
   .note{font-size:11.5px;color:var(--muted);font-weight:600;}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;font-size:13px;font-weight:700;padding:12px 22px;border-radius:99px;transition:transform .3s;z-index:99;}
   .toast.show{transform:translateX(-50%) translateY(0);}
@@ -75,11 +80,12 @@
   <button class="nv on" data-p="dash" onclick="go('dash')">▦ Dashboard</button>
   <button class="nv" data-p="search" onclick="go('search')">✈ Search &amp; Issue</button>
   <button class="nv" data-p="bookings" onclick="go('bookings')">🎟 My Bookings</button>
+  <button class="nv" data-p="statement" onclick="go('statement')">📑 My Statement</button>
   <button class="nv" data-p="support" onclick="go('support')">💬 Support</button>
   <p class="nav-lbl">Restricted by main agent</p>
   <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Wallet is managed by your main agent')">💳 Wallet</button>
   <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Agents module requires main-agent role')">👥 Agents</button>
-  <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Statements are managed by your main agent')">📑 Statement</button>
+  <button class="nv lock" title="Not permitted by Himalayan Voyages" onclick="toast('🔒 Agency-wide statement is visible to your main agent only')">🏦 Agency Statement</button>
   <div style="flex:1"></div>
   <button class="nv" onclick="location.href='auth.html'">↩ Logout</button>
 </aside>
@@ -108,13 +114,24 @@
         <div class="kpi"><span>Limit remaining</span><b style="color:var(--ok);">NPR 60,000</b></div>
         <div class="kpi"><span>Pending requests</span><b>2</b></div>
       </div>
+      <div class="card" style="padding:18px 20px;margin-bottom:16px;">
+        <p style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;">Quick flight search</p>
+        <div class="qsearch">
+          <div><label>From</label><input value="Kathmandu (KTM)"></div>
+          <div><label>To</label><input value="Kuala Lumpur (KUL)"></div>
+          <div><label>Departure</label><input type="date" value="2026-08-20"></div>
+          <div><label>Passengers</label><select><option>1 Adult</option><option>2 Adults</option><option>2 Adults, 1 Child</option></select></div>
+          <button class="btn btn-p" onclick="go('search')">✈ Search fares</button>
+        </div>
+        <p class="note" style="margin-top:10px;">Search runs right here in your workspace — you are never redirected to the public site.</p>
+      </div>
       <div class="card">
         <table>
           <thead><tr><th>Recent activity</th><th>PNR</th><th>When</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>Issued KTM→DEL · Rajesh Thapa</td><td style="color:var(--a);font-weight:800;">PSKIJS</td><td>Today 10:20</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td>Issued KTM→DEL · Rajesh Thapa</td><td><a href="pnr.html?pnr=PSKIJS" style="color:var(--a);font-weight:800;">PSKIJS</a></td><td>Today 10:20</td><td><span class="pill p-ok">Issued</span></td></tr>
             <tr><td>Top-up request to main agent</td><td>—</td><td>Yesterday</td><td><span class="pill p-warn">Pending</span></td></tr>
-            <tr><td>Issued KTM→KUL · Mina Gurung</td><td style="color:var(--a);font-weight:800;">QIYWOQ</td><td>17 Jul</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td>Issued KTM→KUL · Mina Gurung</td><td><a href="pnr.html?pnr=QIYWOQ" style="color:var(--a);font-weight:800;">QIYWOQ</a></td><td>17 Jul</td><td><span class="pill p-ok">Issued</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -126,8 +143,15 @@
       <p class="sub">Fares shown net of agency markup. Your remaining limit: <b style="color:var(--ok);">NPR 60,000</b></p>
 
       <div class="card" style="padding:18px 20px;margin-bottom:16px;">
-        <p style="font-size:13px;font-weight:800;margin-bottom:4px;">KTM → KUL · Thu, 20 Aug 2026 · 1 Adult · Economy</p>
-        <p class="note">Demo search — two fares below exercise the limit rule.</p>
+        <div class="qsearch">
+          <div><label>From</label><input id="sf-from" value="Kathmandu (KTM)"></div>
+          <div><label>To</label><input id="sf-to" value="Kuala Lumpur (KUL)"></div>
+          <div><label>Departure</label><input type="date" value="2026-08-20"></div>
+          <div><label>Passengers</label><select><option>1 Adult</option><option>2 Adults</option><option>2 Adults, 1 Child</option></select></div>
+          <div><label>Cabin</label><select><option>Economy</option><option>Business</option></select></div>
+          <button class="btn btn-p" onclick="toast('✓ Demo: fares refreshed for '+document.getElementById('sf-from').value+' → '+document.getElementById('sf-to').value)">✈ Search</button>
+        </div>
+        <p class="note" style="margin-top:10px;">Search runs inside your workspace. Two demo fares below exercise the issuing-limit rule.</p>
       </div>
 
       <!-- fare within limit -->
@@ -169,18 +193,44 @@
     <!-- MY BOOKINGS -->
     <section class="pane" id="p-bookings">
       <h1>My Bookings</h1>
-      <p class="sub">Scoped to tickets issued by you — other agents' bookings are not visible.</p>
+      <p class="sub">Scoped to tickets issued by you — other agents' bookings are not visible. Click a PNR for full details.</p>
       <div class="card">
         <table>
           <thead><tr><th>PNR</th><th>Route</th><th>Passenger</th><th>Issued</th><th>Fare</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td style="color:var(--a);font-weight:800;">PSKIJS</td><td>KTM → DEL</td><td>Rajesh Thapa</td><td>19 Jul 2026</td><td>NPR 18,900</td><td><span class="pill p-ok">Issued</span></td></tr>
-            <tr><td style="color:var(--a);font-weight:800;">QIYWOQ</td><td>KTM → KUL</td><td>Mina Gurung</td><td>17 Jul 2026</td><td>NPR 32,651</td><td><span class="pill p-ok">Issued</span></td></tr>
-            <tr><td style="color:var(--a);font-weight:800;">TMBG2K</td><td>KTM → KUL</td><td>Hari Shrestha</td><td>15 Jul 2026</td><td>NPR 24,200</td><td><span class="pill p-warn">Held · TTL 20 Aug</span></td></tr>
-            <tr><td style="color:var(--a);font-weight:800;">XKPL9A</td><td>KTM → DXB</td><td>Sunita Karki</td><td>12 Jul 2026</td><td>NPR 41,800</td><td><span class="pill p-red">Cancelled</span></td></tr>
+            <tr><td><a href="pnr.html?pnr=PSKIJS" style="color:var(--a);font-weight:800;">PSKIJS</a></td><td>KTM → DEL</td><td>Rajesh Thapa</td><td>19 Jul 2026</td><td>NPR 18,900</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td><a href="pnr.html?pnr=QIYWOQ" style="color:var(--a);font-weight:800;">QIYWOQ</a></td><td>KTM → KUL</td><td>Mina Gurung</td><td>17 Jul 2026</td><td>NPR 32,651</td><td><span class="pill p-ok">Issued</span></td></tr>
+            <tr><td><a href="pnr.html?pnr=TMBG2K" style="color:var(--a);font-weight:800;">TMBG2K</a></td><td>KTM → KUL</td><td>Hari Shrestha</td><td>15 Jul 2026</td><td>NPR 24,200</td><td><span class="pill p-warn">Held · TTL 20 Aug</span></td></tr>
+            <tr><td><a href="pnr.html?pnr=XKPL9A" style="color:var(--a);font-weight:800;">XKPL9A</a></td><td>KTM → DXB</td><td>Sunita Karki</td><td>12 Jul 2026</td><td>NPR 41,800</td><td><span class="pill p-red">Cancelled</span></td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- MY STATEMENT -->
+    <section class="pane" id="p-statement">
+      <h1>My Statement</h1>
+      <p class="sub">Scoped to your own transactions only — the agency-wide statement stays with Himalayan Voyages.</p>
+      <div class="cards">
+        <div class="kpi"><span>Allocation received (Jul)</span><b>NPR 1,00,000</b></div>
+        <div class="kpi"><span>Issued by you (Jul)</span><b>NPR 75,751</b></div>
+        <div class="kpi"><span>Refunds to allocation</span><b style="color:var(--ok);">NPR 33,800</b></div>
+        <div class="kpi"><span>Allocation remaining</span><b style="color:var(--ok);">NPR 60,000</b></div>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Date &amp; Time</th><th>Ledger ID</th><th>Context</th><th>Type</th><th>Credit (+)</th><th>Debit (−)</th><th>Allocation left</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>19 Jul 2026, 10:20</td><td style="color:var(--a);font-weight:800;">SLG-4412</td><td><a href="pnr.html?pnr=PSKIJS" style="color:var(--a);font-weight:800;">PSKIJS</a></td><td>Ticket Issuance</td><td>—</td><td style="color:var(--a);font-weight:800;">-18,900</td><td>60,000</td><td><span class="pill p-ok">Completed</span></td></tr>
+            <tr><td>17 Jul 2026, 09:01</td><td style="color:var(--a);font-weight:800;">SLG-4398</td><td><a href="pnr.html?pnr=QIYWOQ" style="color:var(--a);font-weight:800;">QIYWOQ</a></td><td>Ticket Issuance</td><td>—</td><td style="color:var(--a);font-weight:800;">-32,651</td><td>78,900</td><td><span class="pill p-ok">Completed</span></td></tr>
+            <tr><td>15 Jul 2026, 14:30</td><td style="color:var(--a);font-weight:800;">SLG-4371</td><td><a href="pnr.html?pnr=TMBG2K" style="color:var(--a);font-weight:800;">TMBG2K</a></td><td>Fare Hold (TTL)</td><td>—</td><td>— hold 24,200</td><td>111,551</td><td><span class="pill p-warn">Held</span></td></tr>
+            <tr><td>13 Jul 2026, 11:05</td><td style="color:var(--a);font-weight:800;">SLG-4360</td><td><a href="pnr.html?pnr=XKPL9A" style="color:var(--a);font-weight:800;">XKPL9A</a></td><td>Refund Credit</td><td style="color:var(--ok);font-weight:800;">+33,800</td><td>—</td><td>111,551</td><td><span class="pill p-ok">Completed</span></td></tr>
+            <tr><td>12 Jul 2026, 12:40</td><td style="color:var(--a);font-weight:800;">SLG-4344</td><td><a href="pnr.html?pnr=XKPL9A" style="color:var(--a);font-weight:800;">XKPL9A</a></td><td>Ticket Issuance</td><td>—</td><td style="color:var(--a);font-weight:800;">-41,800</td><td>77,751</td><td><span class="pill p-ok">Completed</span></td></tr>
+            <tr><td>01 Jul 2026, 09:00</td><td style="color:var(--a);font-weight:800;">SLG-4290</td><td>ALLOC-JUL</td><td>Allocation from Main Agent</td><td style="color:var(--ok);font-weight:800;">+1,00,000</td><td>—</td><td>119,551</td><td><span class="pill p-ok">Completed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:10px;">Refunds are recorded by your main agent as manual statement entries; they credit back to your allocation automatically.</p>
     </section>
 
     <!-- SUPPORT -->

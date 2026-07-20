@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PNR Details — TripsManDu Partner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%23E3001B%22%2F%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2214%22%20fill%3D%22white%22%20text-anchor%3D%22middle%22%3ETM%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --a:#E3001B; --a2:#ff2d55; --navy:#0A0F1E; --bg:#F2F4F8; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --ok:#16a34a; --okbg:#e8f7ee; --warn:#b45309; --warnbg:#fff7e6; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);min-height:100vh;}
+  a{text-decoration:none;color:inherit;}
+  .top{background:white;border-bottom:1px solid var(--line);padding:0 26px;height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:40;}
+  .tm{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:12px;flex-shrink:0;}
+  .crumb{font-size:13px;font-weight:700;color:var(--muted);}
+  .crumb b{color:var(--ink);}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 22px 60px;}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:18px;cursor:pointer;background:none;border:none;font-family:inherit;}
+  .back:hover{color:var(--a);}
+  .hero{background:var(--navy);border-radius:18px;padding:24px 28px;color:white;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:18px;}
+  .hero .lbl{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);display:block;margin-bottom:4px;}
+  .hero h1{font-size:26px;font-weight:900;letter-spacing:.04em;font-variant-numeric:tabular-nums;}
+  .hero .route{font-size:15px;font-weight:800;}
+  .pill{font-size:11px;font-weight:800;padding:5px 14px;border-radius:99px;white-space:nowrap;}
+  .p-ok{background:var(--okbg);color:var(--ok);}
+  .p-warn{background:var(--warnbg);color:var(--warn);}
+  .p-red{background:#fde8ea;color:#b00015;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px;}
+  .card{background:white;border-radius:14px;box-shadow:0 2px 12px -4px rgba(10,15,30,.08);padding:20px 22px;}
+  .card h2{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #f8fafc;font-size:13px;}
+  .kv:last-child{border-bottom:none;}
+  .kv span{color:var(--muted);font-weight:600;}
+  .kv b{font-weight:800;text-align:right;}
+  .ttl{background:var(--warnbg);border:1.5px solid #fbbf24;border-radius:14px;padding:18px 22px;margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .ttl b.count{font-size:26px;font-weight:900;color:var(--warn);font-variant-numeric:tabular-nums;}
+  .seg{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap;}
+  .seg:last-child{border-bottom:none;}
+  .seg .code{font-size:19px;font-weight:900;}
+  .seg .tm2{font-size:12px;color:var(--muted);font-weight:700;}
+  .seg .line{flex:1;min-width:60px;height:2px;background:linear-gradient(90deg,var(--line),var(--a),var(--line));border-radius:2px;position:relative;}
+  .seg .meta{font-size:11.5px;color:var(--muted);font-weight:700;text-align:center;}
+  .price .kv b{font-variant-numeric:tabular-nums;}
+  .total{display:flex;justify-content:space-between;padding-top:12px;margin-top:8px;border-top:2px solid #f1f5f9;font-size:15px;font-weight:900;}
+  .total b{color:var(--a);}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:12px;border-radius:99px;padding:10px 20px;transition:all .2s;}
+  .btn-p{background:linear-gradient(135deg,var(--a),var(--a2));color:white;box-shadow:0 4px 14px -4px rgba(227,0,27,.45);}
+  .btn-g{background:white;color:var(--ink);border:1.5px solid var(--line);}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;font-size:13px;font-weight:700;padding:12px 22px;border-radius:99px;transition:transform .3s;z-index:99;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .demo{margin-top:22px;font-size:11.5px;color:var(--muted);font-weight:600;}
+  .demo a{color:var(--a);font-weight:800;}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="tm" href="index.html">TM</a>
+  <span class="crumb">Partner Portal / <b>PNR Details</b></span>
+</div>
+
+<div class="wrap">
+  <button class="back" onclick="history.length>1?history.back():location.href='agency.html'">← Back</button>
+
+  <div class="hero">
+    <div>
+      <span class="lbl">PNR ID</span>
+      <h1 id="h-pnr">—</h1>
+    </div>
+    <div>
+      <span class="lbl">Airline PNR</span>
+      <p class="route" id="h-apnr">—</p>
+    </div>
+    <div>
+      <span class="lbl">Route</span>
+      <p class="route" id="h-route">—</p>
+    </div>
+    <div style="margin-left:auto;"><span class="pill" id="h-status">—</span></div>
+  </div>
+
+  <div class="ttl" id="ttlbox" style="display:none;">
+    <div style="flex:1;min-width:220px;">
+      <p style="font-size:13px;font-weight:900;color:var(--warn);margin-bottom:2px;">⏳ Ticket Time Limit — PNR booked, not yet issued</p>
+      <p style="font-size:12px;color:var(--ink);font-weight:600;" id="ttl-note">Issue before the TTL expires or the PNR auto-cancels and seats are released.</p>
+    </div>
+    <div style="text-align:right;">
+      <b class="count" id="ttl-count">—</b>
+      <p style="font-size:10.5px;font-weight:800;color:var(--warn);letter-spacing:.1em;text-transform:uppercase;">hh : mm : ss left</p>
+    </div>
+    <button class="btn btn-p" onclick="toast('✓ Demo: ticket issued — PNR moves to Ticketed and wallet is debited')">Issue now</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Passenger &amp; Contact</h2>
+      <div id="pax"></div>
+      <div class="kv"><span>Contact phone</span><b id="c-phone">—</b></div>
+      <div class="kv"><span>Contact email</span><b id="c-email">—</b></div>
+    </div>
+    <div class="card">
+      <h2>Issuance</h2>
+      <div class="kv"><span>Issued by</span><b id="i-by">—</b></div>
+      <div class="kv"><span>Agency</span><b id="i-agency">—</b></div>
+      <div class="kv"><span>Booked on</span><b id="i-booked">—</b></div>
+      <div class="kv"><span>Issued date</span><b id="i-date">—</b></div>
+      <div class="kv"><span>E-ticket no.</span><b id="i-etkt" style="font-variant-numeric:tabular-nums;">—</b></div>
+      <div class="kv"><span>Payment</span><b id="i-pay">—</b></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <h2>Flight Details</h2>
+    <div id="segs"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card price">
+      <h2>Price Details</h2>
+      <div class="kv"><span>Base fare</span><b id="p-base">—</b></div>
+      <div class="kv"><span>Taxes &amp; surcharges</span><b id="p-tax">—</b></div>
+      <div class="kv"><span>Agency markup</span><b id="p-markup">—</b></div>
+      <div class="total"><span>Total collected</span><b id="p-total">—</b></div>
+    </div>
+    <div class="card">
+      <h2>Fare Conditions</h2>
+      <div class="kv"><span>Fare type</span><b id="f-type">—</b></div>
+      <div class="kv"><span>Cabin · baggage</span><b id="f-bag">—</b></div>
+      <div class="kv"><span>Date change</span><b id="f-chg">—</b></div>
+      <div class="kv"><span>Cancellation</span><b id="f-cxl">—</b></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-p" id="a-etkt" onclick="toast('✓ Demo: e-ticket PDF downloaded')">⬇ Download e-ticket</button>
+    <button class="btn btn-g" onclick="toast('✓ Demo: itinerary emailed to the passenger contact')">✉ Email itinerary</button>
+    <button class="btn btn-g" onclick="location.href='agency.html'">Raise service request</button>
+  </div>
+
+  <p class="demo">Demo PNRs: <a href="pnr.html?pnr=PNR-KTM4471">PNR-KTM4471</a> · <a href="pnr.html?pnr=PNR-DXB7710">PNR-DXB7710 (TTL)</a> · <a href="pnr.html?pnr=PNR-DOH1187">PNR-DOH1187 (cancelled)</a> · <a href="pnr.html?pnr=TMBG2K">TMBG2K (sub-agent, TTL)</a> · <a href="pnr.html?pnr=PSKIJS">PSKIJS</a></p>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+  const PNRS = {
+    'PNR-KTM4471': { apnr:'H9X4KL', route:'KTM → KUL', status:'Ticketed',
+      pax:[['Anisha Sherpa','Adult · Lead'],['Dawa Sherpa','Adult']], phone:'+977 9841 220 917', email:'anisha.sherpa@example.com',
+      by:'Pemba Sherpa (Main Agent)', agency:'Himalayan Voyages', booked:'18 Jul 2026, 09:58', issued:'18 Jul 2026, 10:22', etkt:'115-2401998812', pay:'Agency Wallet',
+      segs:[['KTM','01:35','KUL','08:15','H9 561 · Himalaya Airlines · Thu, 20 Aug 2026 · Non-stop · 4h 55m']],
+      base:24800, tax:6151, markup:1700, faretype:'Published · Non-refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 5,000 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'PNR-DXB7710': { apnr:'EKY9RT', route:'KTM → DXB', status:'Booked · Awaiting issue', ttl: 4*3600 + 42*60,
+      ttlNote:'TTL set by Emirates: issue by today 23:59 NPT or the PNR auto-cancels.',
+      pax:[['Ramesh Gurung','Adult · Lead']], phone:'+977 9803 114 402', email:'ramesh.gurung@example.com',
+      by:'Anish Rai (Sub-agent)', agency:'Himalayan Voyages', booked:'17 Jul 2026, 18:41', issued:'— not issued', etkt:'— generated on issue', pay:'Pending · wallet hold NPR 41,200',
+      segs:[['KTM','19:55','DXB','22:40','EK 2185 · Emirates · Fri, 21 Aug 2026 · Non-stop · 5h 30m']],
+      base:33400, tax:6600, markup:1200, faretype:'Published · Refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 4,500 + fare difference', cxl:'NPR 8,000 penalty before departure' },
+    'PNR-KUL2290': { apnr:'MHW2QP', route:'KTM → KUL', status:'Ticketed',
+      pax:[['Sarita Thapa','Adult · Lead'],['Bibek Thapa','Adult'],['Aarav Thapa','Child']], phone:'+977 9860 337 218', email:'sarita.thapa@example.com',
+      by:'Sunita Gurung (Sub-agent)', agency:'Himalayan Voyages', booked:'17 Jul 2026, 09:12', issued:'17 Jul 2026, 09:40', etkt:'232-8804417765', pay:'Agency Wallet',
+      segs:[['KTM','13:30','KUL','20:05','MH 115 · Malaysia Airlines · Sat, 22 Aug 2026 · Non-stop · 4h 50m']],
+      base:14200, tax:3320, markup:900, faretype:'Published · Non-refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 5,500 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'PNR-DOH1187': { apnr:'QRZ7NM', route:'KTM → DOH', status:'Cancelled · Refunded',
+      pax:[['Bikram Thapa','Adult · Lead']], phone:'+977 9818 990 301', email:'bikram.thapa@example.com',
+      by:'Bikash Thapa (Sub-agent)', agency:'Himalayan Voyages', booked:'15 Jul 2026, 20:05', issued:'15 Jul 2026, 20:31 · voided 16 Jul', etkt:'157-6612093348 (VOID)', pay:'Refunded NPR 19,900 to wallet (penalty NPR 8,000)',
+      segs:[['KTM','19:30','DOH','22:05','QR 651 · Qatar Airways · Tue, 25 Aug 2026 · Non-stop · 5h 05m']],
+      base:21400, tax:5300, markup:1200, faretype:'Published · Refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 6,000 + fare difference', cxl:'NPR 8,000 penalty — applied on 16 Jul' },
+    'PNR-SIN9021': { apnr:'MIQ8XR', route:'KTM → SIN', status:'Ticketed',
+      pax:[['Maya Tamang','Adult · Lead'],['Suman Tamang','Adult']], phone:'+977 9851 002 764', email:'maya.tamang@example.com',
+      by:'Maya Tamang (Sub-agent)', agency:'Himalayan Voyages', booked:'15 Jul 2026, 11:20', issued:'15 Jul 2026, 11:55', etkt:'618-3308841127', pay:'Agency Wallet',
+      segs:[['KTM','10:25','SIN','17:10','MI 413 · SilkAir · Mon, 24 Aug 2026 · Non-stop · 4h 30m']],
+      base:21600, tax:4400, markup:1200, faretype:'Published · Non-refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 5,000 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'PSKIJS': { apnr:'PSKIJS', route:'KTM → DEL', status:'Ticketed',
+      pax:[['Rajesh Thapa','Adult · Lead']], phone:'+977 9808 445 190', email:'rajesh.thapa@example.com',
+      by:'Anish Rai (Sub-agent)', agency:'Himalayan Voyages', booked:'19 Jul 2026, 10:02', issued:'19 Jul 2026, 10:20', etkt:'098-7745120933', pay:'Sub-agent allocation',
+      segs:[['KTM','11:45','DEL','13:15','AI 216 · Air India · Sun, 19 Jul 2026 · Non-stop · 1h 45m']],
+      base:14900, tax:3150, markup:850, faretype:'Published · Non-refundable', bag:'Economy · 25kg + 8kg cabin', chg:'NPR 4,000 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'QIYWOQ': { apnr:'QIYWOQ', route:'KTM → KUL', status:'Ticketed',
+      pax:[['Mina Gurung','Adult · Lead']], phone:'+977 9812 660 774', email:'mina.gurung@example.com',
+      by:'Anish Rai (Sub-agent)', agency:'Himalayan Voyages', booked:'17 Jul 2026, 08:44', issued:'17 Jul 2026, 09:01', etkt:'115-2401998954', pay:'Sub-agent allocation',
+      segs:[['KTM','01:35','KUL','08:15','H9 561 · Himalaya Airlines · Mon, 17 Aug 2026 · Non-stop · 4h 55m']],
+      base:26400, tax:5401, markup:850, faretype:'Published · Non-refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 5,000 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'TMBG2K': { apnr:'TMBG2K', route:'KTM → KUL', status:'Held · Awaiting issue', ttl: 26*3600,
+      ttlNote:'Held fare: issue by Thu, 20 Aug 2026 · 18:00 NPT or the hold lapses.',
+      pax:[['Hari Shrestha','Adult · Lead']], phone:'+977 9845 118 226', email:'hari.shrestha@example.com',
+      by:'Anish Rai (Sub-agent)', agency:'Himalayan Voyages', booked:'15 Jul 2026, 14:30', issued:'— not issued', etkt:'— generated on issue', pay:'Pending · within allocation',
+      segs:[['KTM','07:40','DAC','09:10','BG 372 · Biman Bangladesh · Thu, 20 Aug 2026 · 1h 30m'],['DAC','17:30','KUL','21:15','BG 086 · Biman Bangladesh · Thu, 20 Aug 2026 · 3h 45m']],
+      base:19400, tax:3950, markup:850, faretype:'Published · Non-refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 5,500 + fare difference', cxl:'Non-refundable (taxes refundable)' },
+    'XKPL9A': { apnr:'XKPL9A', route:'KTM → DXB', status:'Cancelled · Refunded',
+      pax:[['Sunita Karki','Adult · Lead']], phone:'+977 9823 774 605', email:'sunita.karki@example.com',
+      by:'Anish Rai (Sub-agent)', agency:'Himalayan Voyages', booked:'12 Jul 2026, 12:15', issued:'12 Jul 2026, 12:40 · voided 13 Jul', etkt:'176-9902231184 (VOID)', pay:'Refunded NPR 33,800 to allocation (penalty NPR 8,000)',
+      segs:[['KTM','19:55','DXB','22:40','FZ 576 · flydubai · Wed, 26 Aug 2026 · Non-stop · 5h 30m']],
+      base:34600, tax:6000, markup:1200, faretype:'Published · Refundable', bag:'Economy · 30kg + 7kg cabin', chg:'NPR 4,500 + fare difference', cxl:'NPR 8,000 penalty — applied on 13 Jul' },
+  };
+
+  const q = new URLSearchParams(location.search).get('pnr') || 'PNR-KTM4471';
+  const d = PNRS[q] || PNRS['PNR-KTM4471'];
+  const id = PNRS[q] ? q : 'PNR-KTM4471';
+  const npr = n => 'NPR ' + n.toLocaleString('en-IN');
+
+  document.title = id + ' — PNR Details · TripsManDu';
+  document.getElementById('h-pnr').textContent = id;
+  document.getElementById('h-apnr').textContent = d.apnr;
+  document.getElementById('h-route').textContent = d.route;
+  const st = document.getElementById('h-status');
+  st.textContent = d.status;
+  st.className = 'pill ' + (/Cancelled/.test(d.status) ? 'p-red' : /Booked|Held/.test(d.status) ? 'p-warn' : 'p-ok');
+
+  document.getElementById('pax').innerHTML = d.pax.map(p =>
+    '<div class="kv"><span>' + p[1] + '</span><b>' + p[0] + '</b></div>').join('');
+  document.getElementById('c-phone').textContent = d.phone;
+  document.getElementById('c-email').textContent = d.email;
+  document.getElementById('i-by').textContent = d.by;
+  document.getElementById('i-agency').textContent = d.agency;
+  document.getElementById('i-booked').textContent = d.booked;
+  document.getElementById('i-date').textContent = d.issued;
+  document.getElementById('i-etkt').textContent = d.etkt;
+  document.getElementById('i-pay').textContent = d.pay;
+
+  document.getElementById('segs').innerHTML = d.segs.map(s =>
+    '<div class="seg">' +
+      '<div><p class="code">' + s[0] + '</p><p class="tm2">' + s[1] + '</p></div>' +
+      '<div class="line"></div>' +
+      '<p class="meta">' + s[4] + '</p>' +
+      '<div class="line"></div>' +
+      '<div style="text-align:right;"><p class="code">' + s[2] + '</p><p class="tm2">' + s[3] + '</p></div>' +
+    '</div>').join('');
+
+  document.getElementById('p-base').textContent = npr(d.base);
+  document.getElementById('p-tax').textContent = npr(d.tax);
+  document.getElementById('p-markup').textContent = npr(d.markup);
+  document.getElementById('p-total').textContent = npr(d.base + d.tax + d.markup);
+  document.getElementById('f-type').textContent = d.faretype;
+  document.getElementById('f-bag').textContent = d.bag;
+  document.getElementById('f-chg').textContent = d.chg;
+  document.getElementById('f-cxl').textContent = d.cxl;
+
+  if (/Cancelled|Booked|Held/.test(d.status)) {
+    const b = document.getElementById('a-etkt');
+    b.disabled = true; b.style.opacity = .45; b.style.cursor = 'not-allowed';
+    b.onclick = () => toast(/Cancelled/.test(d.status) ? 'Ticket voided — e-ticket no longer valid' : 'E-ticket is generated when the PNR is issued');
+  }
+
+  if (d.ttl) {
+    document.getElementById('ttlbox').style.display = 'flex';
+    if (d.ttlNote) document.getElementById('ttl-note').textContent = d.ttlNote;
+    let left = d.ttl;
+    const el = document.getElementById('ttl-count');
+    const tick = () => {
+      const h = String(Math.floor(left/3600)).padStart(2,'0'),
+            m = String(Math.floor(left%3600/60)).padStart(2,'0'),
+            s = String(left%60).padStart(2,'0');
+      el.textContent = h + ' : ' + m + ' : ' + s;
+      if (left-- > 0) setTimeout(tick, 1000);
+    };
+    tick();
+  }
+
+  let tt;
+  function toast(msg){
+    const t = document.getElementById('toastEl');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
